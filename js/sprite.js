@@ -24,7 +24,7 @@ function Sprite(name, x, y)
 		this.animations[animName][dir] = new Array();
 		for(i=0;i<numFrames;i++){
 			this.animations[animName][dir][i] = new Image();
-			this.animations[animName][dir][i].src = "images/" + this.name + "/" + fileName + i + ".png";		
+			this.animations[animName][dir][i].src = "http://localhost/Untitled-html5-tile-based-platformer/images/" + this.name + "/" + fileName + i + ".png";		
 		}
 	}
 	

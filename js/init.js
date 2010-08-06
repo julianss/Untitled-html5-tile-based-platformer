@@ -1,14 +1,12 @@
-const tileSize = 16;
 const FPS = 30;
 
 var canvas = null;
 var context2D = null;
 
-/*TILES*/
-var map = null;
+/*TILES
 var tileimages = new Array();
 for(i=1;i<=3;i++)
-	tileimages[i] = new Image();
+	tileimages[i] = new Image();*/
 var grad = null;
 
 /*SPRITES*/
@@ -36,19 +34,15 @@ function start()
 	canvas = $("#canvas")[0];
 	context2D = canvas.getContext('2d');
 	
-	tileimages[1].src = "images/wall.png";
-	tileimages[2].src = "images/ladder.png";
-	tileimages[3].src = "images/moneda.png";
-	
-	hero = new Hero().setupHero("hero", 16, tileSize*13)
+	/*for(tile in tileimages)
+		tileimages[tile].src = tilesrcs[tile];*/
+		
+	hero = new Hero().setupHero("hero", tileSize*1, tileSize*13)
 	sprites.push(hero);
 	
 	
 	createBackGradient();
-	loadMap(0);
-	$("#canvas").ajaxComplete(function(){
-		setInterval(gameLoop, 1000/FPS);
-	});
+	setInterval(gameLoop, 1000/FPS);
 	
 }
 
@@ -65,43 +59,15 @@ function drawBack()
 	context2D.fillRect(0,0,640,480);
 }
 
-function drawMap()
-{
-	for(i in map)
-		for(j in map[i]){
-			tile = map[i][j];
-			if(tile>0)
-				context2D.drawImage(tileimages[tile], j*tileSize, i*tileSize);
-		}
-				
-}
-
-function loadMap(num)
-{
-	dir = 'php/getMap.php?num='+num;
-	jQuery.ajax({url: dir, type: 'GET', success: function(data, ts, xhr){
-			lines = data.split('\n');
-			map = new Array();
-			for(l in lines){
-				row = new Array();
-				tiles = lines[l].split(',');
-				for(t in tiles)
-					row.push(parseInt(tiles[t]));
-				map.push(row);	
-			}
-		}
-	});
-}
-
 function gameLoop(){
 	
-	if(isTile(map, hero.getGridCoord(tileSize), 3)){
+	if(isTile(map, hero.getGridCoord(tileSize), TILE_COIN)){
 		addScore(100);
 		clearTile(map, hero.getGridCoord(tileSize));
 	}
 
 	drawBack();
-	drawMap();
+	drawMap(map, context2D, tileSize, tileimages);
 	for(s in sprites){
 		if(sprites[s].update)
 			sprites[s].update();
